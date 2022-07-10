@@ -5,8 +5,8 @@ import rasterio
 
 from rasterio.plot import show
 
-shape_file = gpd.read_file('../dataset/shape_files/traindata.shp')
-src = rasterio.open('../dataset/sentinel_2/2020/20200107/IMG_DATA/47PQS_20200107_B03.jp2')
+shape_file = gpd.read_file('../datasets/shape_files/traindata.shp')
+src = rasterio.open('../datasets/sentinel_2/2020/20200107/IMG_DATA/47PQS_20200107_B03.jp2')
 # print(shape_file)
 # shape_file = shape_file[['crop_type']]
 # print(shape_file)
