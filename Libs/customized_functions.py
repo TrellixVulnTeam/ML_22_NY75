@@ -70,3 +70,17 @@ def plot_rgb(B2, B3, B4, clip):
 	stackedRGB = exposure.rescale_intensity(stackedRGB, in_range=(pLow, pHigh))
 	plt.imshow(stackedRGB, cmap='terrain')
 	plt.show()
+
+def trim_zeros(arr):
+    slices = tuple(slice(idx.min(), idx.max() + 1) for idx in np.nonzero(arr))
+    return arr[slices]
+
+def extract_farm_id(image, farm_id):
+	index_list = np.where(farm_id != 0)
+	for i in range (0, len(index_list[0])):
+		farm_id[index_list[0][i], index_list[1][i]] = image[index_list[0][i], index_list[1][i]]
+		# farm_id[dummy[0, i], dummy[1, i]] = image[dummy[0, i], dummy[1, i]]
+	# NOTE trim farm
+	farm_id = trim_zeros(farm_id)
+	# farm_id = np.pad(farm_id, 1, mode='constant')
+	return farm_id
