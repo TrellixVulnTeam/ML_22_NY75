@@ -79,8 +79,20 @@ def extract_farm_id(image, farm_id):
 	index_list = np.where(farm_id != 0)
 	for i in range (0, len(index_list[0])):
 		farm_id[index_list[0][i], index_list[1][i]] = image[index_list[0][i], index_list[1][i]]
-		# farm_id[dummy[0, i], dummy[1, i]] = image[dummy[0, i], dummy[1, i]]
 	# NOTE trim farm
 	farm_id = trim_zeros(farm_id)
-	# farm_id = np.pad(farm_id, 1, mode='constant')
 	return farm_id
+
+# def scatter_plot():
+# 	_, ax = plt.subplots(nrows=1, ncols=1, figsize=(20, 20), tight_layout=True)
+# 	facies_colors = ['#27AE60', '#D4AC0D', '#D35400', '#9B59B6']
+# 	crop_colors = colors.ListedColormap(facies_colors[0:len(facies_colors)], 'indexed')
+# 	shape_file.plot(ax=ax, column='crop_type', cmap=crop_colors, legend=False)
+# 	show(src.read(), transform=src.transform, ax=ax, cmap='gray')
+# 	ax.set_title('Study Area', fontsize=24, fontweight='bold')
+# 	ax.set_xlabel('latitude', fontsize=22, fontweight='bold')
+# 	ax.set_ylabel('longtitude', fontsize=22, fontweight='bold')
+# 	ax.ticklabel_format(useOffset=False, style='plain')
+# 	plt.xticks(fontsize=22, weight='bold')
+# 	plt.yticks(fontsize=22, weight='bold')
+# 	plt.show()

@@ -4,6 +4,8 @@ import matplotlib.colors as colors
 import rasterio
 
 from rasterio.plot import show
+# pip install rasterio
+# pip install geopandas
 
 shape_file = gpd.read_file('../datasets/shape_files/traindata.shp')
 src = rasterio.open('../datasets/sentinel_2/2020/20200107/IMG_DATA/47PQS_20200107_B03.jp2')
