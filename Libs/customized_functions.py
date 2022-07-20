@@ -75,13 +75,17 @@ def trim_zeros(arr):
     slices = tuple(slice(idx.min(), idx.max() + 1) for idx in np.nonzero(arr))
     return arr[slices]
 
-def extract_farm_id(image, farm_id):
+def extract_farm_id(image, farm_id, trim_zero):
 	index_list = np.where(farm_id != 0)
+	dummy = np.zeros(shape=(image.shape[0], image.shape[1]))
 	for i in range (0, len(index_list[0])):
-		farm_id[index_list[0][i], index_list[1][i]] = image[index_list[0][i], index_list[1][i]]
+		dummy[index_list[0][i], index_list[1][i]] = image[index_list[0][i], index_list[1][i]]
 	# NOTE trim farm
-	farm_id = trim_zeros(farm_id)
-	return farm_id
+	if trim_zero == 'yes':
+		dummy = trim_zeros(dummy)
+	elif trim_zero == 'no':
+		pass
+	return dummy
 
 # def scatter_plot():
 # 	_, ax = plt.subplots(nrows=1, ncols=1, figsize=(20, 20), tight_layout=True)
