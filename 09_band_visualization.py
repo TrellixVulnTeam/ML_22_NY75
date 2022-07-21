@@ -3,34 +3,95 @@ sys.path.append('./Libs')
 import customized_functions as cf
 #-----------------------------------------------------------------------------------------#
 import rasterio
-
+from skimage.transform import resize
 # pip install scikit-image
+#-----------------------------------------------------------------------------------------#
 
-# NOTE import near infrared band (B8)
-file_name = '../datasets/sentinel_2/2020/20200107/IMG_DATA/47PQS_20200107_B08.jp2'
-nir = rasterio.open(file_name)
-nir = nir.read(); nir = nir[0, :, :]
-# min_num, max_num = cf.clip(nir, 100)
-# cf.plot_band(nir, min_num, max_num)
+'''
+step 1: learn simple plot
+'''
 
 # NOTE import red band (B4)
 file_name = '../datasets/sentinel_2/2020/20200107/IMG_DATA/47PQS_20200107_B04.jp2'
 red = rasterio.open(file_name)
 red = red.read(); red = red[0, :, :]
-# min_num, max_num = cf.clip(red, 99)
-# cf.plot_band(red, min_num, max_num)
+min_num, max_num = cf.clip(red, 99)
+cf.plot_band(red, 'Reds', min_num, max_num, 'B4')
 
-# NOTE NDVI
-ndvi = cf.NDVI(nir, red)
-# min_num, max_num = cf.clip(ndvi, 95)
-# cf.plot_band(ndvi, min_num, max_num)
-# cf.histogram_plot(ndvi)
+'''
+step 2: for-loop plots for single band 
+'''
 
-# NOTE import red band (B3)
-file_name = '../datasets/sentinel_2/2020/20200107/IMG_DATA/47PQS_20200107_B03.jp2'
-B3 = rasterio.open(file_name)
-B3 = B3.read(); B3 = B3[0, :, :]
-file_name = '../datasets/sentinel_2/2020/20200107/IMG_DATA/47PQS_20200107_B02.jp2'
-B2 = rasterio.open(file_name)
-B2 = B2.read(); B2 = B2[0, :, :]
-cf.plot_rgb(B2, B3, red, 1)
+# # NOTE file names
+# B4 = '../datasets/sentinel_2/2020/20200107/IMG_DATA/47PQS_20200107_B04.jp2'
+# B3 = '../datasets/sentinel_2/2020/20200107/IMG_DATA/47PQS_20200107_B03.jp2'
+# B2 = '../datasets/sentinel_2/2020/20200107/IMG_DATA/47PQS_20200107_B02.jp2'
+# bands = [B4, B3, B2]
+# # NOTE band color
+# band_color = ['Reds', 'Greens', 'Blues']
+# # NOTE save names
+# save_band = ['B4', 'B3', 'B2']
+# # NOTE begin for-loop
+# for index, i in enumerate(bands):
+# 	print('accessing band: ', i)
+# 	band = rasterio.open(i)
+# 	band = band.read(); band = band[0, :, :]
+# 	min_num, max_num = cf.clip(band, 99)
+# 	cf.plot_band(band, band_color[index], min_num, max_num, save_band[index])
+
+'''
+step 3: for-loop plots for composite colors
+'''
+
+# # NOTE pre-load files
+# file_part = '../datasets/sentinel_2/2020/20200107/IMG_DATA/'
+# B1  = file_part + '47PQS_20200107_B01.jp2'
+# B2  = file_part + '47PQS_20200107_B02.jp2'
+# B3  = file_part + '47PQS_20200107_B03.jp2'
+# B4  = file_part + '47PQS_20200107_B04.jp2'
+# B8  = file_part + '47PQS_20200107_B08.jp2'
+# B8A = file_part + '/47PQS_20200107_B8A.jp2'
+# B11 = file_part + '/47PQS_20200107_B11.jp2'
+# B12 = file_part + '/47PQS_20200107_B12.jp2'
+# bands = [B1, B2, B3, B4, B8, B8A, B11, B12]
+# # NOTE for-loop for storing each band in variables
+# for index, i in enumerate(bands):
+# 	print('accessing band: ', i)
+# 	band = rasterio.open(i)
+# 	band = band.read(); band = band[0, :, :]
+# 	if index == 0:
+# 		B1 = band
+# 	elif index == 1:
+# 		B2 = band
+# 	elif index == 2:
+# 		B3 = band
+# 	elif index == 3:
+# 		B4 = band
+# 	elif index == 4:
+# 		B8 = band
+# 	elif index == 5:
+# 		B8A = band
+# 	elif index == 6:
+# 		B11 = band
+# 	elif index == 7:
+# 		B12 = band
+# # # NOTE natural colors (B4, B3, B2)
+# # cf.composite_bands(B4, B3, B2, 0.90)
+# # # NOTE color infrared (B8, B4, B3)
+# # cf.composite_bands(B8, B4, B3, 0.90)
+# # # NOTE short-wave infrared (B12, B8A, B4)
+# # resized_B4 = resize(B4, (B12.shape[0], B12.shape[1]))  
+# # cf.composite_bands(B12, B8A, resized_B4, 0.90)
+# # # NOTE agriculture (B11, B8, B2)
+# # resized_B2 = resize(B2, (B11.shape[0], B11.shape[1]))  
+# # resized_B8 = resize(B8, (B11.shape[0], B11.shape[1]))  
+# # cf.composite_bands(B11, resized_B8, resized_B2, 0.90)
+# # # NOTE geology (B12, B11, B2)
+# # cf.composite_bands(B12, B11, resized_B2, 0.90)
+# # # NOTE bathymetric (B4, B3, B1)
+# # resized_B4 = resize(B4, (B1.shape[0], B1.shape[1]))  
+# # resized_B3 = resize(B3, (B1.shape[0], B1.shape[1]))  
+# # cf.composite_bands(resized_B4, resized_B3, B1, 0.90)
+# # NOTE vegetation index (B8-B4)/(B8+B4)
+# veg = cf.NDVI(B8, B4)
+# min_num, max_num = cf.clip(veg, 95)

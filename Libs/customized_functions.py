@@ -19,13 +19,14 @@ def clip(image, perc):
 		max_num = image[int(vector_length*(perc/100))]
 	return min_num, max_num
 
-def plot_band(image, min_num, max_num):
+def plot_band(image, color, min_num, max_num, save_name):
 	'''
 	General plot
 	'''
 	plt.figure(figsize=(20, 20))
-	plt.imshow(image, cmap='terrain', vmin=min_num, vmax=max_num)
-	plt.colorbar(orientation='vertical')
+	plt.imshow(image, cmap=color, vmin=min_num, vmax=max_num)
+	plt.axis('off')
+	plt.savefig('pictures/' + save_name + '.svg', format='svg', bbox_inches='tight', transparent=True, pad_inches=0)
 	plt.show()
 
 def NDVI(nir, red):
@@ -56,19 +57,34 @@ def normalized_data(y, lowest_value, highest_value):
 	y = (y - y.min()) / (y.max() - y.min())
 	return y * (highest_value - lowest_value) + lowest_value
 
-def plot_rgb(B2, B3, B4, clip):
+# def plot_rgb(B2, B3, B4, clip):
+# 	'''
+# 	RGB plot
+# 	'''
+# 	B2 = normalized_data(B2, 0, 1)
+# 	B3 = normalized_data(B3, 0, 1)
+# 	B4 = normalized_data(B4, 0, 1)
+# 	# stackedRGB = np.stack((B2, B3, B4), axis=2)
+# 	stackedRGB = np.stack((B4, B3, B2), axis=2)
+# 	print(stackedRGB.shape)
+# 	pLow, pHigh = np.percentile(stackedRGB[~np.isnan(stackedRGB)], (clip, 100-clip))
+# 	stackedRGB = exposure.rescale_intensity(stackedRGB, in_range=(pLow, pHigh))  # type: ignore
+# 	plt.imshow(stackedRGB, cmap='terrain')
+# 	plt.show()
+
+def composite_bands(a, b, c, clip):
 	'''
-	RGB plot
+	composite bands
 	'''
-	B2 = normalized_data(B2, 0, 1)
-	B3 = normalized_data(B3, 0, 1)
-	B4 = normalized_data(B4, 0, 1)
-	# stackedRGB = np.stack((B2, B3, B4), axis=2)
-	stackedRGB = np.stack((B4, B3, B2), axis=2)
-	print(stackedRGB.shape)
-	pLow, pHigh = np.percentile(stackedRGB[~np.isnan(stackedRGB)], (clip, 100-clip))
-	stackedRGB = exposure.rescale_intensity(stackedRGB, in_range=(pLow, pHigh))
-	plt.imshow(stackedRGB, cmap='terrain')
+	# print(a.shape, b.shape, c.shape)
+	a = normalized_data(a, 0, 1); b = normalized_data(b, 0, 1); c = normalized_data(c, 0, 1)
+	band_stacking = np.stack((a, b, c), axis=2)
+	pLow, pHigh = np.percentile(band_stacking[~np.isnan(band_stacking)], (clip, 100-clip))
+	band_stacking = exposure.rescale_intensity(band_stacking, in_range=(pLow, pHigh))  # type: ignore
+	plt.figure(figsize=(20, 20))
+	plt.imshow(band_stacking, cmap='terrain')
+	plt.axis('off')
+	# plt.savefig('pictures/' + save_name + '.svg', format='svg', bbox_inches='tight', transparent=True, pad_inches=0)
 	plt.show()
 
 def trim_zeros(arr):
@@ -86,17 +102,3 @@ def extract_farm_id(image, farm_id, trim_zero):
 	elif trim_zero == 'no':
 		pass
 	return dummy
-
-# def scatter_plot():
-# 	_, ax = plt.subplots(nrows=1, ncols=1, figsize=(20, 20), tight_layout=True)
-# 	facies_colors = ['#27AE60', '#D4AC0D', '#D35400', '#9B59B6']
-# 	crop_colors = colors.ListedColormap(facies_colors[0:len(facies_colors)], 'indexed')
-# 	shape_file.plot(ax=ax, column='crop_type', cmap=crop_colors, legend=False)
-# 	show(src.read(), transform=src.transform, ax=ax, cmap='gray')
-# 	ax.set_title('Study Area', fontsize=24, fontweight='bold')
-# 	ax.set_xlabel('latitude', fontsize=22, fontweight='bold')
-# 	ax.set_ylabel('longtitude', fontsize=22, fontweight='bold')
-# 	ax.ticklabel_format(useOffset=False, style='plain')
-# 	plt.xticks(fontsize=22, weight='bold')
-# 	plt.yticks(fontsize=22, weight='bold')
-# 	plt.show()

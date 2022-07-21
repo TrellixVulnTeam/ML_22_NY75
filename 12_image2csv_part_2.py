@@ -52,7 +52,7 @@ maize = np.zeros(shape=len(df), dtype=np.float32)
 sugarcrane = np.zeros(shape=len(df), dtype=np.float32)
 
 '''
-step 3: create for-loop to correct farm ids planned crops (1354 farms)
+step 3: create for-loop to correct farm ids where belong to crops (1354 farms)
 '''
 
 for i in range (0, len(B2_shape)):
