@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import geopandas as gpd
 
 '''
-Creating scatter plot that overleys with labels (crop types)
+Part 2: This part initiates for-loop to transform farm ids into a data point in tabular data. We demonstrate only band 2. 
 '''
 
 '''
@@ -80,20 +80,29 @@ step 4: scatter plot
 '''
 
 a = df['B2_vector']
-a = a[::100]
+a = a[::1000]
 b = df['B2_cassava']
-b = b[::100]
+b = b[::1000]
 c = df['B2_rice']
-c = c[::100]
+c = c[::1000]
 d = df['B2_maize']
-d = d[::100]
+d = d[::1000]
 e = df['B2_sugarcrane']
-e = e[::100]
+e = e[::1000]
 y = np.linspace(0, len(a), len(a))
-plt.scatter(y, a, color='orange')
-plt.scatter(y, b, color='red')
-plt.scatter(y, c, color='black')
-plt.scatter(y, d, color='blue')
-plt.scatter(y, e, color='green')
-plt.ylim(250, a.max())
+# NOTE scatter plot
+plt.figure(figsize=(20, 10))
+plt.scatter(y, a, color='blue', s=20, edgecolor='black')
+plt.scatter(y, b, color='#27AE60', s=100, edgecolor='black')
+plt.scatter(y, c, color='#D4AC0D', s=100, edgecolor='black')
+plt.scatter(y, d, color='#D35400', s=100, edgecolor='black')
+plt.scatter(y, e, color='#9B59B6', s=100, edgecolor='black')
+
+# plt.scatter(y, b, color='blue', s=100, edgecolor='black')
+# plt.scatter(y, c, color='blue', s=100, edgecolor='black')
+# plt.scatter(y, d, color='blue', s=100, edgecolor='black')
+# plt.scatter(y, e, color='blue', s=100, edgecolor='black')
+plt.ylim(250, 1380)
+plt.axis('off')
+plt.savefig('pictures/scatter_labels' + '.png', format='png', bbox_inches='tight', transparent=True, pad_inches=0)
 plt.show()
