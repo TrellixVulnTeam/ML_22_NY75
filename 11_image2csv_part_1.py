@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 '''
-Part 1: This exercise demonstrates a simple data transformation from satellite imagery into tabular data. One tile contains 1354 farm ids and each id indicates only a single crop type.
+Part 1: This exercise demonstrates a simple data transformation from satellite imagery into tabular data. One tile contains 1317 farm ids and each id indicates only a single crop type.
 '''
 
 '''
@@ -51,9 +51,9 @@ plt.show()
 step 3: calculate median and mean and store in dictionary
 '''
 
-# farm_id = farm_id.flatten()
-# farm_id = farm_id[farm_id != 0]
-# df['B2_median'][0] = np.median(farm_id)
-# df['B2_mean'][0] = np.mean(farm_id)
+farm_id = farm_id.flatten()
+farm_id = farm_id[farm_id != 0]
+df['B2_median'][0] = np.median(farm_id)
+df['B2_mean'][0] = np.mean(farm_id)
 
-# print(df)
+print(df)
