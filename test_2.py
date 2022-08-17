@@ -1,6 +1,6 @@
 import sys
 sys.path.append('./Libs') 
-import customized_functions as cf
+import functions as cf
 #-----------------------------------------------------------------------------------------#
 import rasterio
 import matplotlib.pyplot as plt

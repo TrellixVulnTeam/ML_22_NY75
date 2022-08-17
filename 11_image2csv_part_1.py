@@ -1,6 +1,6 @@
 import sys
 sys.path.append('./Libs') 
-import customized_functions as cf
+import functions as cf
 #-----------------------------------------------------------------------------------------#
 import pandas as pd
 import geopandas as gpd
