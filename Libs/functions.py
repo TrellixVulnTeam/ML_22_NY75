@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-# from skimage import exposure 
+from skimage import exposure 
 
 def ellipse(b, x, a):
     """
