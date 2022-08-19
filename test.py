@@ -1,22 +1,23 @@
-import pandas as pd
+import matplotlib.pyplot as plt
+from basic_units import cm
 
-# NOTE read label from csv
-df_1 = pd.read_csv('save_tabular/shape_file.csv')
-# print(df_1)
-# NOTE allocate dictionary
-data = {
-        'crop_types': [],
-        'B2_mean'   : [],
-		'B2_median' : []
-        }
+fig, ax = plt.subplots()
 
-# print(data)
-df = pd.DataFrame(data)
-# print(type(df))
-# df.to_csv('save_tabular/test.csv', index=False)
-df['crop_types'] = df_1['crop_type']
-# print(df)
-test = [45, 11, 2, 113, 29]
-for i in range (0, 5):
-	df['B2_mean'][0] = test[i]
-print(df)
+ax.annotate("Note 01", [0.5*cm, 0.5*cm])
+
+# xy and text both unitized
+ax.annotate('local max', xy=(3*cm, 1*cm), xycoords='data',
+            xytext=(0.8*cm, 0.95*cm), textcoords='data',
+            arrowprops=dict(facecolor='black', shrink=0.05),
+            horizontalalignment='right', verticalalignment='top')
+
+# mixing units w/ nonunits
+ax.annotate('local max', xy=(3*cm, 1*cm), xycoords='data',
+            xytext=(0.8, 0.95), textcoords='axes fraction',
+            arrowprops=dict(facecolor='black', shrink=0.05),
+            horizontalalignment='right', verticalalignment='top')
+
+
+ax.set_xlim(0*cm, 4*cm)
+ax.set_ylim(0*cm, 4*cm)
+plt.show()
