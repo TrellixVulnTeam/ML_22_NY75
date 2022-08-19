@@ -9,7 +9,7 @@ from rasterio.plot import show
 #-----------------------------------------------------------------------------------------#
 
 '''
-Satellite imagery is metadata containing arrays, georeference, indexes, and polygons. We use geopandas to manipulate shape files, and this exercise contains farm boundaries embedded in georeference. To plot the image (array) with coordinates, we use rasterio corporates with geopandas. 
+Satellite imagery is metadata containing arrays, georeference, indexes, and polygons, which uses geopandas to manipulate shape files. In this exercise, we will explore farm boundaries containing four crop types that embed in georeference. To fit the image (array) in latitude and longitude, we use rasterio and geopandas to manipulate the header and array. 
 '''
 
 # NOTE import shape file
