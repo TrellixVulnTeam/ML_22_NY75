@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 
 from sklearn.cluster import KMeans
+from bokeh.palettes import Set1
 
 def scatter_plot(lithocolors, x, y, facies, lithofacies):
 	fig = plt.figure(figsize=(10, 10))
@@ -42,3 +43,28 @@ def find_nearest(data):
 		index = difference_array.argmin()
 		kmean_data[i, 0] = index
 	return kmean_data
+
+def visualize_classifier(model, lithocolors, x, y, lithofacies, labels, title, ylabel, xlabel):
+	'''
+	For fancy colors please intall: 
+	pip install bokeh
+	'''
+	# TODO scatter plot
+	# _, ax = plt.rcParams['figure.figsize'] = (12, 8)
+	fig = plt.figure(figsize=(10, 10))
+	scatter_colors = colors.ListedColormap(lithocolors)
+	scatter = plt.scatter(x, y, c=labels, s=30, cmap=scatter_colors, zorder=3, edgecolors='black', alpha=0.9)
+	plt.title(title); plt.ylabel(ylabel); plt.xlabel(xlabel)
+	plt.xlim(30, 140)
+	plt.legend(handles=scatter.legend_elements()[0], labels=lithofacies, frameon=True, framealpha=1.0, loc='upper right')
+
+	# TODO decsion trees	
+	X = np.zeros(shape=(len(x), 2), dtype=float)
+	X[:, 0] = x; X[:, 1] = y
+	model.fit(X, labels)
+	xx, yy = np.meshgrid(np.linspace(30, 140, 200), np.linspace(y.min(), y.max(), 200))
+	Z = model.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
+	n_classes = len(np.unique(labels))
+	cmap = colors.ListedColormap(Set1[9][0:9]) # use color pallete from bokeh
+	plt.contourf(xx, yy, Z, alpha=0.3, levels=np.arange(n_classes + 1) - 0.5, cmap=cmap, zorder=1)
+	plt.show()

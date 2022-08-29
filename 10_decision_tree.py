@@ -5,9 +5,11 @@ import basic_functions as bf
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
 #-----------------------------------------------------------------------------------------#
 
-# NOTE import data
+# TODO import data
 data = pd.read_csv('../datasets/welllog_csv/welllogs.csv')
 
 # NOTE prepare data
@@ -38,25 +40,12 @@ lithofacies = ['SS',
                'BS']
 # bf.scatter_plot(lithocolors, x, y, labels, lithofacies)
 
-# TODO compute K-Means 
-print('label list: ', data['Facies'].unique())
-print('lable length: ', len(data['Facies'].unique()))
-number_of_clusters = len(data['Facies'].unique())
-# compute k-means 
-# k_data = bf.compute_kmeans(x, y, number_of_clusters-1)
-k_data = bf.compute_kmeans(x, y, number_of_clusters)
-# fit kmean data into decided classes
-facies = bf.find_nearest(k_data)
-lithofacies = ['facie 1',
-               'facie 2',
-               'facie 3',
-               'facie 4',
-               'facie 5',
-               'facie 6',
-               'facie 7',
-               'facie 8',
-               'facie 9']
-
-# NOTE display final result
-# plot k-means
-bf.scatter_plot(lithocolors, x, y, facies, lithofacies)
+# NOTE compute decision trees
+title = 'Decision Tree (Max Depth: 20)'
+ytitle = data.columns[5]
+xtitle = data.columns[4]
+bf.visualize_classifier(DecisionTreeClassifier(max_depth=20), lithocolors,
+                        data['GR'], data['ILD_log10'], lithofacies,
+                        data['Facies'],
+                        title, ytitle, xtitle,
+                        )
