@@ -58,4 +58,3 @@ lithofacies = ['facie 1',
                'facie 9']
 # plot k-means
 bf.scatter_plot(lithocolors, x, y, facies, lithofacies)
-sss
