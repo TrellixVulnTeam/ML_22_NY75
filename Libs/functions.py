@@ -32,10 +32,9 @@ def plot_band(image, color, min_num, max_num, save_name):
 	'''
 	General plot
 	'''
-	plt.figure(figsize=(20, 20))
 	plt.imshow(image, cmap=color, vmin=min_num, vmax=max_num)
 	plt.axis('off')
-	plt.savefig('pictures/' + save_name + '.svg', format='svg', bbox_inches='tight', transparent=True, pad_inches=0)
+	# plt.savefig('pictures/' + save_name + '.svg', format='svg', bbox_inches='tight', transparent=True, pad_inches=0)
 	plt.show()
 
 def NDVI(nir, red):
@@ -91,7 +90,7 @@ def composite_bands(a, b, c, clip):
 	band_stacking = np.stack((a, b, c), axis=2) # red always first
 	pLow, pHigh = np.percentile(band_stacking[~np.isnan(band_stacking)], (clip, 100-clip))
 	band_stacking = exposure.rescale_intensity(band_stacking, in_range=(pLow, pHigh))  # type: ignore
-	plt.figure(figsize=(20, 20))
+	# plt.figure(figsize=(20, 20))
 	plt.imshow(band_stacking, cmap='viridis', alpha=1.)
 	plt.axis('off')
 	# plt.savefig('pictures/geo' + '.svg', format='svg', bbox_inches='tight', transparent=True, pad_inches=0)
