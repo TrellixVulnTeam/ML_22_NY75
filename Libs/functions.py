@@ -111,3 +111,17 @@ def extract_farm_id(image, farm_id, trim_zero):
 	elif trim_zero == 'no':
 		pass
 	return dummy
+
+# NOTE replace existing data
+def normalization_2(data, drop_cols, log_names):# shift mean to zero
+	dummy = data.drop(drop_cols, axis=1)
+	scaler = preprocessing.StandardScaler().fit(dummy)
+	dummy = scaler.transform(dummy)
+	for count, item in enumerate(log_names):
+		data[item] = dummy[:, count]
+	return data
+
+def remove_outliers(data, log, min_o, max_o):
+	q_low = data[log].quantile(min_o)
+	q_hi  = data[log].quantile(max_o)
+	return data[(data[log] < q_hi) & (data[log] > q_low)]
