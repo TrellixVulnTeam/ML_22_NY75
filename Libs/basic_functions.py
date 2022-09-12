@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
+import seaborn as sns
 
 from sklearn.cluster import KMeans
 from bokeh.palettes import Set1
@@ -11,6 +12,25 @@ def scatter_plot(lithocolors, x, y, facies, lithofacies):
 	scatter = plt.scatter(x, y, c=facies, s=30, edgecolors='black', alpha=1.0, marker='o', cmap=cmap)
 	# plt.xlim(0, 350); plt.ylim(0, 80)
 	plt.legend(handles=scatter.legend_elements()[0], labels=lithofacies, frameon=True, loc='lower right')
+	plt.show()
+
+def scatter_plot_2(y):
+	plt.figure(figsize=(10, 10))
+	x = np.linspace(0, len(y), len(y))
+	scatter = plt.scatter(x, y, color='orangered', s=50, edgecolors='black', alpha=1.0, marker='o')
+	plt.title('Input Data', fontweight='bold')
+	plt.xlabel('index'); plt.ylabel('intensity')
+	plt.savefig('../drawing/image_out/' + 'beforeNor' + '.svg', format='svg', bbox_inches='tight', transparent=True, pad_inches=0)
+	plt.show()
+
+def KDE_plot(input_data):
+	fig, ax = plt.subplots()
+	sns.kdeplot(data=input_data[:, 0], color='#27AE60', shade=True, multiple='stack', ax=ax, label='RobustScaler')
+	sns.kdeplot(data=input_data[:, 1], color='#D4AC0D', shade=True, multiple='stack', ax=ax, label='MinMaxScaler')
+	plt.title('Kernel Density Estimation (KDE)', fontweight='bold')
+	plt.xlabel('intensity'); plt.ylabel('density')
+	plt.legend(loc='upper left')
+	plt.savefig('../drawing/image_out/' + 'KDE_nor' + '.svg', format='svg', bbox_inches='tight', transparent=True, pad_inches=0)
 	plt.show()
 
 def compute_kmeans(x, y, number_of_classes):

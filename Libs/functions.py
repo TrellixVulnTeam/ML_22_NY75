@@ -125,3 +125,11 @@ def remove_outliers(data, log, min_o, max_o):
 	q_low = data[log].quantile(min_o)
 	q_hi  = data[log].quantile(max_o)
 	return data[(data[log] < q_hi) & (data[log] > q_low)]
+
+def hstack_farm(farm_id, crop_type_number):
+	band_number = farm_id[farm_id != 0.].reshape(-1, 1)
+	vector_length = len(band_number)
+	crop_type = np.repeat(crop_type_number, vector_length).reshape(-1, 1)
+	band_median = np.repeat(np.median(band_number), vector_length).reshape(-1, 1)
+	band_mean = np.repeat(np.mean(band_number), vector_length).reshape(-1, 1)
+	return np.hstack((crop_type, band_number, band_median, band_mean))
