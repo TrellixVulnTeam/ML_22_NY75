@@ -58,7 +58,7 @@ bands = [B1, B2, B3, B4, B8, B8A, B11, B12]
 for index, i in enumerate(bands):
 	print('accessing band: ', i)
 	band = rasterio.open(i)
-	band = band.read(); band = band[0, :, :]
+	band = band.read(1)
 	if index == 0:
 		B1 = band
 	elif index == 1:
@@ -87,7 +87,7 @@ resized_B2 = resize(B2, (B11.shape[0], B11.shape[1]))
 resized_B8 = resize(B8, (B11.shape[0], B11.shape[1])) 
 f.composite_bands(B11, resized_B8, resized_B2, 0.90)
 # NOTE geology (B12, B11, B2)
-f.composite_bands(B12, B11, resized_B2, 0.95)
+# f.composite_bands(B12, B11, resized_B2, 0.95)
 f.composite_bands(resized_B2, B11, B12, 0.95)
 # NOTE bathymetric (B4, B3, B1)
 resized_B4 = resize(B4, (B1.shape[0], B1.shape[1])) 

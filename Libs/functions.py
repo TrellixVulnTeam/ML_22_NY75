@@ -1,7 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import rasterio
 
+from numpy import save
+from rasterio import features
+from rasterio.features import rasterize
+from skimage.transform import resize
 from skimage import exposure 
+from sklearn.preprocessing import RobustScaler
 
 def ellipse(b, x, a):
     """
@@ -65,21 +71,6 @@ def normalized_data(y, lowest_value, highest_value):
 	y = (y - y.min()) / (y.max() - y.min())
 	return y * (highest_value - lowest_value) + lowest_value
 
-# def plot_rgb(B2, B3, B4, clip):
-# 	'''
-# 	RGB plot
-# 	'''
-# 	B2 = normalized_data(B2, 0, 1)
-# 	B3 = normalized_data(B3, 0, 1)
-# 	B4 = normalized_data(B4, 0, 1)
-# 	# stackedRGB = np.stack((B2, B3, B4), axis=2)
-# 	stackedRGB = np.stack((B4, B3, B2), axis=2)
-# 	print(stackedRGB.shape)
-# 	pLow, pHigh = np.percentile(stackedRGB[~np.isnan(stackedRGB)], (clip, 100-clip))
-# 	stackedRGB = exposure.rescale_intensity(stackedRGB, in_range=(pLow, pHigh))  # type: ignore
-# 	plt.imshow(stackedRGB, cmap='terrain')
-# 	plt.show()
-
 def composite_bands(a, b, c, clip):
 	'''
 	composite bands
@@ -95,6 +86,13 @@ def composite_bands(a, b, c, clip):
 	plt.axis('off')
 	# plt.savefig('pictures/geo' + '.svg', format='svg', bbox_inches='tight', transparent=True, pad_inches=0)
 	plt.show()
+
+def composite_2(a, b, c, clip):
+	a = normalized_data(a, 0, 255); b = normalized_data(b, 0, 255); c = normalized_data(c, 0, 255)
+	band_stacking = np.stack((a, b, c), axis=2) # red always first
+	pLow, pHigh = np.percentile(band_stacking[~np.isnan(band_stacking)], (clip, 100-clip))
+	stacked_bands = exposure.rescale_intensity(band_stacking, in_range=(pLow, pHigh))  
+	return(stacked_bands)
 
 def trim_zeros(arr):
     slices = tuple(slice(idx.min(), idx.max() + 1) for idx in np.nonzero(arr))
@@ -133,3 +131,59 @@ def hstack_farm(farm_id, crop_type_number):
 	band_median = np.repeat(np.median(band_number), vector_length).reshape(-1, 1)
 	band_mean = np.repeat(np.mean(band_number), vector_length).reshape(-1, 1)
 	return np.hstack((crop_type, band_number, band_median, band_mean))
+
+def hstack_farm_2(farm_id, crop_type_number):
+	'''
+	compute one farm and then hstack
+	'''
+	band_number = farm_id[farm_id != 0.].reshape(-1, 1)
+	vector_length = len(band_number)
+	crop_type = np.repeat(crop_type_number, vector_length).reshape(-1, 1)
+	return np.hstack((crop_type, band_number))
+
+def save2npy(date, suffix_, band_array):
+	save_file_name = '../datasets/save_npy_2/' + date + suffix_
+	print('saving: ', save_file_name)
+	save(save_file_name, band_array)
+
+def access_bands(file_, date):
+	'''
+	B2, B3, B4, B8, veg 
+	'''
+	B2  = file_ + 'B02.jp2'
+	B3  = file_ + 'B03.jp2'
+	B4  = file_ + 'B04.jp2'
+	B8  = file_ + 'B08.jp2'
+	bands = [B2, B3, B4, B8]
+	for index, i in enumerate(bands):
+		# print('accessing band: ', i)
+		band = rasterio.open(i).read(1)
+		if index == 0:
+			B2 = band
+			save2npy(date, '_B02.npy', B2)
+		elif index == 1:
+			B3 = band
+			save2npy(date, '_B03.npy', B3)
+		elif index == 2:
+			B4 = band
+			save2npy(date, '_B04.npy', B4)
+		elif index == 3:
+			B8 = band
+			save2npy(date, '_B08.npy', B8)
+	veg = NDVI(B8, B4)
+	save2npy(date, '_veg.npy', veg)
+
+def normalize_clip(nor_data):
+	ROW, COL = nor_data.shape
+	nor_data = nor_data.reshape(-1, 1)
+	scaler = RobustScaler()
+	nor_data = scaler.fit_transform(nor_data)
+	nor_data = nor_data.reshape(ROW, COL)
+	min_num, max_num = clip(nor_data, 95)
+	for i in range (0, ROW):
+		for ii in range (0, COL):
+			if nor_data[i, ii] < min_num or nor_data[i, ii] > max_num:
+				nor_data[i ,ii] = 0.001 # avoid 0. --> otherwise zero will be clipped during reshape
+			elif nor_data[i, ii] == 0.:
+				nor_data[i ,ii] = 0.001 # avoid 0. --> otherwise zero will be clipped during reshape
+	return nor_data

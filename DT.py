@@ -10,12 +10,13 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from numpy import save
+#-----------------------------------------------------------------------------------------#
 import warnings
 warnings.filterwarnings('ignore')
 #-----------------------------------------------------------------------------------------#
 
 '''
-We use two time stamps namely, 07/01/2020 and 01/02/2020 and four bands namely, B2, B3, B4, and B8.
+We use time stamp 07/01/2020 and four bands namely, B2, B3, B4, and B8.
 Step 1: data transformation, rasterize farm ids into vectors for each band.
 '''
 
