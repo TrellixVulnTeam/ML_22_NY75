@@ -32,8 +32,8 @@ plot confusion matrix
 '''
 
 def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
-	plt.figure(figsize=(25, 15))
-	fontsize = 25
+	plt.figure(figsize=(10, 10))
+	fontsize = 12
 	plt.rcParams.update({'font.size': fontsize})
 	plt.imshow(cm, interpolation='nearest', cmap=cmap)
 	plt.title(title)

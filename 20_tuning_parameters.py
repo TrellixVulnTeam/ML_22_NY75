@@ -28,12 +28,12 @@ dtest = xgb.DMatrix(data=X_test)
 
 # NOTE define parameters
 params = {
-            'objective': 'multi:softmax',
-            'max_depth': 3,
-            'alpha': 10,
-            'learning_rate': 0.01,
-            'num_class': 4
-        }
+          'objective': 'multi:softmax',
+          'max_depth': 3,
+          'alpha': 10,
+          'learning_rate': 0.01,
+          'num_class': 4
+         }
 
 # NOTE training
 bst = xgb.train(params, dtrain)
