@@ -187,3 +187,15 @@ def normalize_clip(nor_data):
 			elif nor_data[i, ii] == 0.:
 				nor_data[i ,ii] = 0.001 # avoid 0. --> otherwise zero will be clipped during reshape
 	return nor_data
+
+def MAE(data_y, model):
+	sum = 0.
+	for i in range (0, len(data_y)):
+		sum += abs(data_y[i] - model[i])
+	return sum/len(data_y)
+
+def MSE(data_y, model):
+	sum = 0.
+	for i in range (0, len(data_y)):
+		sum += (data_y[i] - model[i])**2
+	return sum/len(data_y)
