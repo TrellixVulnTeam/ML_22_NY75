@@ -54,7 +54,7 @@ step 3: begin tuning parameters
 '''
 
 study = optuna.create_study(direction='minimize')
-study.optimize(objective, n_trials=10)
+study.optimize(objective, n_trials=300)
 print('Number of finished trials:', len(study.trials))
 print('Best trial:', study.best_trial.params)
 
