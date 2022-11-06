@@ -13,8 +13,11 @@ step 1: input data
 # NOTE input data
 weights = np.array([99.79, 117.93, 95.25, 100.70, 108.86, 87.54]) # axis-x
 heights = np.array([198.12, 215.90, 205.74, 203.20, 205.74, 190.05]) # axis-y
-m = 0.58 # slope
-c = 145 # intercept
+# 1.9339385169782524 -0.2534447457805413
+# m = 0.58 # slope
+# c = 145 # intercept
+m = 1.9339385169782524 # slope
+c = -0.2534447457805413 # intercept
 y = m*weights + c
 
 '''

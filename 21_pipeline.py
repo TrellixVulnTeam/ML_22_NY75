@@ -9,11 +9,11 @@ import matplotlib.pylab as plt
 #------------------------------------------------------------------------------------------#
 import warnings
 warnings.filterwarnings('ignore')
+#------------------------------------------------------------------------------------------#
 # pip install pretty-confusion-matrix
 #------------------------------------------------------------------------------------------#
 
 # NOTE import file
-# filepath = '../datasets/save_tabular/data_20200107.csv'
 filepath = '../datasets/save_tabular/data_all_2020.csv'
 df = pd.read_csv(filepath)
 
@@ -31,8 +31,8 @@ clf_xgb = xgb.XGBClassifier(base_score=0.5,
                             learning_rate=0.01,
                             n_estimators=500,
                             objective='multi:softprob',
-                            # subsample=1, tree_method='gpu_hist', gpu_id=0,
-                            subsample=1, 
+                            subsample=1, tree_method='gpu_hist', gpu_id=0,
+                            # subsample=1, 
                             verbosity=1)
 clf_xgb.fit(X_train,
             y_train,
@@ -57,7 +57,7 @@ print('f1 score weighted: %.3f' % f1_)
 pp_matrix_from_data(y_test, y_pred, cmap='tab10')
 
 # NOTE feature importance
-print(clf_xgb.feature_importances_)
+# print(clf_xgb.feature_importances_)
 plt.figure(figsize=(6, 12))
 plt.bar(range(len(clf_xgb.feature_importances_)), clf_xgb.feature_importances_)
 labels = df.columns[1:]
